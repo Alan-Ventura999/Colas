@@ -1,0 +1,52 @@
+from collections import deque
+
+SERVICIOS = {
+    1: "Servicio 1",
+    2: "Servicio 2",
+    3: "Servicio 3"
+}
+
+colas_servicios = {
+    1: deque(),
+    2: deque(),
+    3: deque()
+}
+
+def agregar_cliente_a_cola(servicio_id):
+    if servicio_id in colas_servicios:
+        numero_cliente = len(colas_servicios[servicio_id]) + 1
+        colas_servicios[servicio_id].append(numero_cliente)
+        print(f"Cliente {numero_cliente} agregado a la cola de {SERVICIOS[servicio_id]}.")
+    else:
+        print(f"El servicio {servicio_id} no existe.")
+
+def atender_cliente_de_cola(servicio_id):
+    if servicio_id in colas_servicios and colas_servicios[servicio_id]:
+        cliente_atendido = colas_servicios[servicio_id].popleft()
+        print(f"Atendiendo al cliente {cliente_atendido} de {SERVICIOS[servicio_id]}.")
+    else:
+        print(f"No hay clientes en la cola de {SERVICIOS.get(servicio_id, 'un servicio no válido')}.")
+
+def sistema_de_colas():
+    while True:
+        accion = input("Escribe 'c' para encolar un cliente, 'a' para atender un cliente o 'q' para salir: ").lower()
+
+        if accion == 'q':
+            print("Saliendo del sistema.")
+            break
+
+        if accion in ['c', 'a']:
+            try:
+                servicio_id = int(input("Escribe el número del servicio (1, 2 o 3): "))
+            except ValueError:
+                print("Número de servicio inválido. Debe ser 1, 2 o 3.")
+                continue
+
+            if accion == 'c':
+                agregar_cliente_a_cola(servicio_id)
+            elif accion == 'a':
+                atender_cliente_de_cola(servicio_id)
+        else:
+            print("Opción no reconocida, intenta de nuevo.")
+
+sistema_de_colas()
